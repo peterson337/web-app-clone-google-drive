@@ -1,0 +1,279 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30px;
+}
+
+.header__logo{
+    display: inline-flex;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}
+
+.header__logo span{
+    line-height: 40px;
+    margin: 0px 10px;
+    font-size: 23px;
+    color: rgb(114, 114, 114);
+}
+
+.header__user img{
+    height: 32px;
+    width: 32px;
+    border-radius: 20px;
+}
+
+.header__pesquisa{
+    width: 60%;
+}
+
+.header__pesquisa input{
+    width: 100%;
+    height: 50px;
+    padding-left: 60px;
+    border: 0;
+    border-radius: 30px;
+    background-color:#edf2fc;
+    font-weight: bold;
+}
+
+.search{
+    position: absolute;
+    top: 20px;
+    left: 299px;
+    padding: 8px 10px;
+    border-radius: 20px;
+
+}
+
+.search:hover{
+    background-color: #e1e1e1;    
+}
+
+.header__pesquisa input:focus{
+/*     background-color: white;
+ */    outline: none;
+}
+
+.main{
+    width: 100%;
+    display: flex;
+}
+
+.main__sidebar{
+    /* width: 30%; */
+    padding: 40px 10px;
+    
+}
+
+.main__content{
+    width: 70px;
+    padding: 10px;
+}
+
+.hiddenInput{
+    display: none;
+}
+
+.main__btnfileSelect{
+    display: inline-flex;
+    line-height: 15px;
+    padding: 20px 25px;
+    border: 0;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: #ffffff;
+    margin-left: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main__btnfileSelect:hover{
+    background-color: #edf2fc;
+}
+
+.main__btnfileSelect:active{
+        background-color: #edf2fc;
+}
+
+.main__folderMeuDrive{
+    margin-top: 30px;
+    display: inline-flex;
+    line-height: 20px;
+    background-color: #c2e7ff;
+    max-width: 400px;
+    padding: 5px 30px 3px 10px;
+    border-radius: 20px;
+}
+
+.main__folderMeuDrive svg{
+    font-size: 23px;
+}
+
+.main__folderMeuDrive span{
+    margin-left: 20px;
+    position: relative;
+}
+
+.mainTopoText{
+    padding: 8px 0;
+    font-weight: normal;
+    color: black;
+
+}
+
+.mainTopoText h2{
+    width: 200px;
+    font-size: 30px;
+    margin-left: 40px;
+    cursor: pointer;
+}
+
+.main__content{
+    position: absolute;
+    left: 179px;
+    top: 90px;    
+    background-color: white;
+    width: 900px;
+    border-radius: 20px;
+    padding-bottom: 20px;
+}
+
+.progress{
+    margin-left: 2px;
+}
+
+.boxFile{
+    position: absolute;
+    left: 179px;
+    top: 139px;
+    display: flex;
+    margin-top: 20px;
+    word-wrap: break-word;
+    flex-wrap: wrap;
+    max-width: 900px;
+    background-color: white;
+    padding: 25px 25px;
+    border-radius: 20px;
+}
+
+.boxFileSingle{
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    max-width: 150px;
+    background-color: #f2f6fc;
+    padding-top: 20px;
+}
+
+.boxFileSingleLink{
+    color: rgb(0, 174, 255);
+    font-weight: bold;
+     
+
+}
+
+.boxFileSingleLink:hover{
+    color: red;
+    text-decoration: underline;
+}
+
+.boxFileSingle svg{
+    font-size: 30px;
+    margin-left: 35px;
+    margin-bottom: 10px;
+}
+
+.boxFileSingle a{
+    border-top: 1px solid #ccc;
+    padding: 5px 0;
+    display: block;
+}
+
+@media screen and (max-width:768px) {
+    
+    .boxFile{
+        display: flex;
+        flex-wrap: wrap;
+        position: absolute;
+        left: 1px;
+        top: 329px;
+        padding: 30px 10px;
+        justify-content: space-around;
+
+    }
+
+    .boxFileSingle{
+        margin-left: 0;
+        margin-bottom: 10px;
+        width: 45%;
+        padding-top: 20px;
+    }
+
+    .main{
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .main__sidebar{
+         width: 100%;
+    }
+    
+    .main__content{
+        display: none;
+        width: 100%;
+        position: absolute;
+        left: -5px;
+        top: 270px;
+    }
+
+    .header__logo{
+        display: none;
+     }
+     
+     .header__logo span{
+         display: none;
+     }
+
+     .header__user img{
+        position: absolute;
+        right: 40px;
+        top: 19px;
+        height: 32px;
+        width: 32px;
+        border-radius: 20px;
+    }
+
+    .header__pesquisa{
+        width: 100%;
+    }
+    
+    .header__pesquisa input{
+        width: 100%;
+        height: 50px;
+        padding-left: 20px;
+        border: 0;
+        border-radius: 30px;
+        background-color:#edf2fc;
+        font-weight: bold;
+    }
+    
+    .search{
+      display: none;
+    
+    }
+
+    .mainTopoText h2{
+        display: none;
+        
+    }
+
+    .mainTopoText{
+        display: none;
+    
+    }
+
+    }
