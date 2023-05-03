@@ -64,28 +64,21 @@ export default function Home() {
           
       </div>
         :
-        <main className="h-screen bg-black flex items-center justify-center z-20 ">
-        <div className="w-96 h-96 flex items-center justify-center rounded-lg z-20 flex flex-col"
-        style={{backgroundColor:'#f7f9fc'}}
-        >
-
-          <h1 className="text-2xl"
-         style={{position: 'absolute', top:'300px'}}
-          >Clone do goolge drive</h1>
-
-          <h2
-          className="w-80 break-all"
-          style={{position: 'absolute', top:'400px'}}
-          >Você não está cadastrado. Use a sua conta do google para usar o clone do goolge drive
-            
+        <main className="h-screen bg-black flex items-center justify-center z-20">
+        <div className="w-full sm:w-96 h-96 flex items-center justify-center rounded-lg z-20 flex flex-col bg-white text-black p-4 sm:flex-wrap">
+          <h1 className="text-2xl text-center mt-4 mb-8">Clone do Google Drive</h1>
+          <h2 className="w-full break-all text-center mb-8">
+            Você não está cadastrado. Use a sua conta do Google para usar o clone do Google Drive.
           </h2>
-
-          <button className="flex items-center bg-blue-500 text-white font-bold py-2 px-4 rounded-full w-30"
-             style={{position: 'absolute', top:'500px'}}
-           onClick={handleLogin}>Logar com o <div className="ml-2 bg-white rounded-full text-xl"><FcGoogle/></div></button>
-
+          <button
+            className="flex items-center bg-blue-500 text-white font-bold py-2 px-4 rounded-full w-30 mx-auto"
+            onClick={handleLogin}
+          >
+            Logar com o <FcGoogle className="ml-2 bg-white rounded-full text-xl
+" />
+          </button>
         </div>
-        </main>
+      </main>
       }
     </main>
   );
