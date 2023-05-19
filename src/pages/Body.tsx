@@ -4,14 +4,16 @@ import { AiOutlinePlus, AiFillFolder, AiFillFile} from 'react-icons/ai';
 import {BsFillImageFill} from "react-icons/bs";
 import {TbPdf} from "react-icons/tb";
 import {MdVideoLibrary} from "react-icons/md";
-import { getFirestore, collection, addDoc, onSnapshot, doc, getDoc} from "firebase/firestore";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL} from "firebase/storage";
+import {FaTrash} from "react-icons/fa";
+import { getFirestore, collection, addDoc, onSnapshot, doc, getDoc, query, where, getDocs, deleteDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject} from "firebase/storage";
 import { db} from "./firebase";
 
 interface Props {
   login: {
     uid: string;
     imagem: string;
+    arquivo: string;
   } | null;
   setLogin: React.Dispatch<React.SetStateAction<{
     uid: string;
@@ -26,6 +28,12 @@ interface Props {
     photoURL?: string | null;
     imagem?: string | null | undefined;
   } | null>, callback?: () => void) => void);
+}
+
+interface Teste{
+  uid: string;
+  arquivo: string;
+
 }
 
 const Body = (props: Props) => {  
@@ -58,7 +66,10 @@ const Body = (props: Props) => {
     if (arquivoElement) {
       const storageRef = ref(storage, 'documentos/' + uid + '/file/' + arquivo);
       const uploadTask = uploadBytesResumable(storageRef, arquivoElement);
-      
+  
+      // Define o tamanho do pedaço de arquivo
+      const CHUNK_SIZE = 1024 * 1024 * 2; // 2MB
+  
       uploadTask.on('state_changed',
         (snapshot) => {
           const progressTemp = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -86,10 +97,58 @@ const Body = (props: Props) => {
           });
         }
       );
+
+      
+  
+      // Lê o arquivo como um objeto Blob e carrega-o em pedaços
+      const fileReader = new FileReader();
+      fileReader.readAsArrayBuffer(arquivoElement);
+      fileReader.onload = (event: any) => {
+        const arrayBuffer = event.target.result;
+        const chunks = Math.ceil(arrayBuffer.byteLength / CHUNK_SIZE);
+        let cursor = 0;
+  
+        // Envia cada pedaço em paralelo
+        for (let i = 0; i < chunks; i++) {
+          const chunk = arrayBuffer.slice(cursor, cursor + CHUNK_SIZE);
+          cursor += CHUNK_SIZE;
+          const uploadTask = uploadBytesResumable(storageRef, chunk);
+  
+          uploadTask.on('state_changed', (snapshot) => {
+            // Atualiza o progresso do upload total
+            const progressTemp = ((snapshot.bytesTransferred + cursor) / snapshot.totalBytes) * 100;
+            setProgress(progressTemp);
+          });
+        }
+      };
     } else {
       console.log('Nenhum arquivo selecionado.');
     }
   };
+
+  const excluir = async (uid: string, arquivo: string) => {
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `documentos/${uid}/file/${arquivo}`);
+  
+      // Excluir o arquivo do Firebase Storage
+      await deleteObject(storageRef);
+  
+      // Remover o documento correspondente do Firestore
+      const documentosCollectionRef = collection(db, "documentos", uid, "file");
+      const q = query(documentosCollectionRef, where("nome", "==", arquivo));
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+  
+      alert('Arquivo excluído com sucesso.');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   
 
   const sair = () => {
@@ -177,6 +236,8 @@ const closeModal = () => {
               >
               {data.nome}
             </a>
+            <FaTrash onClick={() => excluir(props.login?.uid || '', data.nome)} className='cursor-pointer text-gray-500 hover:text-black' />
+
           </div>  
         )
       } else if(data.tipo_arquivo === "application/pdf"){
@@ -189,6 +250,8 @@ const closeModal = () => {
              href={data.arquivo}>
               {data.nome}
             </a>
+            <FaTrash onClick={() => excluir(props.login?.uid || '', data.nome)} className='cursor-pointer text-gray-500 hover:text-black' />
+
           </div>  
           /* 
           hover:bg-blue-200
@@ -203,7 +266,9 @@ const closeModal = () => {
             <a className={styles.boxFileSingleLink} href={data.arquivo}>
               {data.nome}
             </a>
+            <FaTrash onClick={() => excluir(props.login?.uid || '', data.nome)} className='cursor-pointer text-gray-500 hover:text-black' />
           </div>  
+          
         )
       } else{
         return(
@@ -216,6 +281,8 @@ const closeModal = () => {
           >
             {data.nome}
           </a>
+          <FaTrash onClick={() => excluir(props.login?.uid || '', data.nome)} className='cursor-pointer text-gray-500 hover:text-black' />
+
         </div>  
         )
       }                          
@@ -227,7 +294,7 @@ const closeModal = () => {
                       <div>
                         <label htmlFor="file">Downloading progress:
                         </label> <br />
-                        <progress className={styles.progress}  id="file" value={progress} max='1'>{progress}%</progress>
+                        <progress className="text-blue-500"  id={styles.progress} value={progress} max='1'>{progress}%</progress>
                       </div>
                       :
                       <div></div>
@@ -242,8 +309,6 @@ const closeModal = () => {
               <h2>Meu drive</h2> 
             </div>
       </div>
-
-        
 
         {
           modal?
