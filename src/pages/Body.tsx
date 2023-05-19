@@ -13,7 +13,6 @@ interface Props {
   login: {
     uid: string;
     imagem: string;
-    arquivo: string;
   } | null;
   setLogin: React.Dispatch<React.SetStateAction<{
     uid: string;
